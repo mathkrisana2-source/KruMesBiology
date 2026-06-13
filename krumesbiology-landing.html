@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KruMesBiology — คอร์ส MWIT · KVIS · สอวน.ชีวะ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Sarabun', 'Inter', sans-serif; background: #0a0f1a; color: #e8f0fe; overflow-x: hidden; }
+
+  /* ── Tokens ── */
+  :root {
+    --teal:   #0d9488;
+    --teal-light: #14b8a6;
+    --lime:   #a3e635;
+    --gold:   #f59e0b;
+    --ink:    #0a0f1a;
+    --ink2:   #111827;
+    --muted:  #6b7280;
+    --border: rgba(255,255,255,0.08);
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 2.5rem;
+    background: rgba(10,15,26,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-brand {
+    font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .nav-brand span { color: var(--teal-light); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: #9ca3af; text-decoration: none; font-size: 0.9rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-cta {
+    background: var(--teal); color: #fff; border: none; cursor: pointer;
+    padding: 0.55rem 1.4rem; border-radius: 999px; font-size: 0.9rem;
+    font-weight: 600; font-family: inherit; transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--teal-light); }
+  .nav-mobile-btn { display: none; background: none; border: none; cursor: pointer; color: #fff; font-size: 1.5rem; }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 5rem 4rem;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 70% 50%, rgba(13,148,136,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 20% 80%, rgba(163,230,53,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(13,148,136,0.15); border: 1px solid rgba(13,148,136,0.3);
+    color: var(--teal-light); padding: 0.35rem 0.9rem; border-radius: 999px;
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-eyebrow::before { content: '🧬'; font-size: 0.9rem; }
+  .hero-h1 {
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    font-weight: 800; line-height: 1.08; letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+  }
+  .hero-h1 .line1 { color: #e8f0fe; display: block; }
+  .hero-h1 .line2 { color: var(--teal-light); display: block; }
+  .hero-h1 .line3 { color: var(--lime); display: block; font-size: 0.6em; font-weight: 600; margin-top: 0.3rem; letter-spacing: 0; }
+  .hero-sub {
+    color: #9ca3af; font-size: 1.1rem; line-height: 1.7;
+    margin: 1.5rem 0 2.2rem; max-width: 480px;
+  }
+  .hero-sub strong { color: #e8f0fe; }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--teal); color: #fff; border: none; cursor: pointer;
+    padding: 0.85rem 2rem; border-radius: 999px; font-size: 1rem;
+    font-weight: 700; font-family: inherit; transition: all 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--teal-light); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent; color: #e8f0fe;
+    border: 1px solid rgba(255,255,255,0.2); cursor: pointer;
+    padding: 0.85rem 2rem; border-radius: 999px; font-size: 1rem;
+    font-weight: 600; font-family: inherit; transition: all 0.2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--teal-light); color: var(--teal-light); }
+  .hero-stats {
+    display: flex; gap: 2rem; margin-top: 2.5rem; padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--teal-light); line-height: 1; }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* Hero Image */
+  .hero-visual { position: relative; display: flex; justify-content: center; }
+  .hero-img-wrap {
+    position: relative; width: 100%; max-width: 420px;
+  }
+  .hero-img-bg {
+    position: absolute; inset: -20px;
+    background: radial-gradient(circle, rgba(13,148,136,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-portrait {
+    width: 100%; border-radius: 2rem;
+    object-fit: cover; aspect-ratio: 3/4;
+    position: relative; z-index: 1;
+    border: 1px solid var(--border);
+  }
+  .hero-badge {
+    position: absolute; bottom: 1.5rem; left: -1.5rem; z-index: 2;
+    background: var(--ink2); border: 1px solid var(--border);
+    border-radius: 1rem; padding: 0.8rem 1.2rem;
+    backdrop-filter: blur(10px);
+  }
+  .hero-badge-num { font-size: 1.5rem; font-weight: 800; color: var(--gold); }
+  .hero-badge-text { font-size: 0.75rem; color: var(--muted); }
+  .hero-tag {
+    position: absolute; top: 1.5rem; right: -1rem; z-index: 2;
+    background: rgba(163,230,53,0.15); border: 1px solid rgba(163,230,53,0.3);
+    color: var(--lime); border-radius: 999px;
+    padding: 0.4rem 0.9rem; font-size: 0.8rem; font-weight: 700;
+  }
+
+  /* ── Section base ── */
+  section { padding: 6rem 5rem; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--teal-light); margin-bottom: 0.8rem;
+  }
+  .section-h2 {
+    font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 800;
+    line-height: 1.15; letter-spacing: -0.02em; color: #e8f0fe;
+    margin-bottom: 1rem;
+  }
+  .section-sub { color: var(--muted); font-size: 1.05rem; line-height: 1.7; max-width: 560px; }
+
+  /* ── Why Section ── */
+  .why { background: var(--ink2); }
+  .why-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center; margin-top: 4rem;
+  }
+  .why-cards { display: flex; flex-direction: column; gap: 1.2rem; }
+  .why-card {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    border-radius: 1rem; padding: 1.3rem 1.5rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+  .why-card:hover { border-color: rgba(13,148,136,0.4); }
+  .why-icon {
+    width: 2.5rem; height: 2.5rem; border-radius: 0.6rem;
+    background: rgba(13,148,136,0.15); display: flex;
+    align-items: center; justify-content: center; font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .why-card-title { font-size: 0.95rem; font-weight: 700; color: #e8f0fe; margin-bottom: 0.3rem; }
+  .why-card-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+  .why-img-stack { position: relative; }
+  .why-img-main {
+    width: 100%; border-radius: 1.5rem; object-fit: cover;
+    aspect-ratio: 4/3; border: 1px solid var(--border);
+  }
+  .why-img-overlay {
+    position: absolute; bottom: -1.5rem; right: -1.5rem;
+    width: 55%; border-radius: 1rem; object-fit: cover;
+    aspect-ratio: 4/3; border: 2px solid var(--ink2);
+  }
+
+  /* ── Course Section ── */
+  .course { background: var(--ink); }
+  .course-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+  .course-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .course-card {
+    background: var(--ink2); border: 1px solid var(--border);
+    border-radius: 1.5rem; padding: 2rem; position: relative;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex; flex-direction: column;
+  }
+  .course-card:hover { transform: translateY(-4px); border-color: rgba(13,148,136,0.4); }
+  .course-card.featured {
+    border-color: var(--teal); background: linear-gradient(135deg, rgba(13,148,136,0.1), var(--ink2));
+  }
+  .course-badge-featured {
+    position: absolute; top: -0.7rem; left: 50%; transform: translateX(-50%);
+    background: var(--teal); color: #fff; font-size: 0.72rem; font-weight: 700;
+    padding: 0.25rem 0.9rem; border-radius: 999px; white-space: nowrap;
+  }
+  .course-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .course-name { font-size: 1.1rem; font-weight: 700; color: #e8f0fe; margin-bottom: 0.5rem; }
+  .course-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem; flex: 1; }
+  .course-topics { list-style: none; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .course-topics li { font-size: 0.82rem; color: #9ca3af; display: flex; gap: 0.5rem; align-items: flex-start; }
+  .course-topics li::before { content: '✓'; color: var(--teal-light); font-weight: 700; flex-shrink: 0; }
+  .course-price { margin-top: auto; }
+  .price-original { font-size: 0.85rem; color: var(--muted); text-decoration: line-through; }
+  .price-main { font-size: 2rem; font-weight: 800; color: var(--gold); line-height: 1; }
+  .price-note { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+  .course-btn {
+    display: block; text-align: center; margin-top: 1.2rem;
+    background: var(--teal); color: #fff; text-decoration: none;
+    padding: 0.7rem; border-radius: 0.7rem; font-weight: 700;
+    font-size: 0.9rem; transition: background 0.2s;
+  }
+  .course-btn:hover { background: var(--teal-light); }
+  .course-card.featured .course-btn { background: var(--lime); color: #0a0f1a; }
+  .course-card.featured .course-btn:hover { background: #bef264; }
+
+  /* ── Teacher Section ── */
+  .teacher { background: var(--ink2); }
+  .teacher-grid {
+    display: grid; grid-template-columns: 1fr 1.4fr;
+    gap: 5rem; align-items: center; margin-top: 3rem;
+  }
+  .teacher-img-wrap { position: relative; }
+  .teacher-portrait {
+    width: 100%; border-radius: 1.5rem; object-fit: cover;
+    aspect-ratio: 3/4; border: 1px solid var(--border);
+  }
+  .teacher-credential {
+    position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+    background: rgba(10,15,26,0.9); border: 1px solid var(--border);
+    backdrop-filter: blur(10px); border-radius: 1rem;
+    padding: 1rem 1.5rem; text-align: center; white-space: nowrap;
+  }
+  .teacher-credential-title { font-size: 0.75rem; color: var(--teal-light); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+  .teacher-credential-name { font-size: 1.1rem; font-weight: 800; color: #e8f0fe; }
+  .teacher-name { font-size: 2.5rem; font-weight: 800; color: #e8f0fe; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+  .teacher-title { color: var(--teal-light); font-size: 1rem; font-weight: 600; margin-bottom: 1.5rem; }
+  .teacher-bio { color: #9ca3af; font-size: 0.95rem; line-height: 1.8; margin-bottom: 2rem; }
+  .teacher-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2rem; }
+  .tag {
+    background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+    color: #d1d5db; font-size: 0.78rem; font-weight: 500;
+    padding: 0.3rem 0.8rem; border-radius: 999px;
+  }
+  .teacher-results { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+  .result-box {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    border-radius: 0.8rem; padding: 1rem; text-align: center;
+  }
+  .result-num { font-size: 1.6rem; font-weight: 800; color: var(--lime); }
+  .result-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* ── Gallery ── */
+  .gallery { background: var(--ink); padding: 5rem; }
+  .gallery-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1rem; margin-top: 3rem;
+  }
+  .gallery-img {
+    width: 100%; aspect-ratio: 4/3; object-fit: cover;
+    border-radius: 1rem; border: 1px solid var(--border);
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .gallery-img:hover { transform: scale(1.02); opacity: 0.9; }
+  .gallery-img:first-child { grid-column: span 2; aspect-ratio: 16/9; }
+
+  /* ── CTA Section ── */
+  .cta-section {
+    background: linear-gradient(135deg, rgba(13,148,136,0.15), rgba(163,230,53,0.05));
+    border-top: 1px solid var(--border);
+    text-align: center; padding: 6rem 5rem;
+  }
+  .cta-section .section-h2 { margin: 0 auto 1rem; max-width: 600px; }
+  .cta-section .section-sub { margin: 0 auto 2.5rem; }
+  .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .cta-note { font-size: 0.8rem; color: var(--muted); margin-top: 1rem; }
+
+  /* ── Footer ── */
+  footer {
+    background: #060a12; border-top: 1px solid var(--border);
+    padding: 2.5rem 5rem; display: flex;
+    justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-brand { font-size: 1rem; font-weight: 700; color: #e8f0fe; }
+  .footer-brand span { color: var(--teal-light); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-links a:hover { color: #e8f0fe; }
+  .footer-copy { color: var(--muted); font-size: 0.8rem; }
+
+  /* ── Mobile ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links, .nav-cta { display: none; }
+    .nav-mobile-btn { display: block; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; gap: 3rem; }
+    .hero-visual { order: -1; }
+    .hero-img-wrap { max-width: 280px; }
+    .hero-badge { left: 0; bottom: 1rem; }
+    section { padding: 4rem 1.5rem; }
+    .why-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .why-img-overlay { display: none; }
+    .course-cards { grid-template-columns: 1fr; }
+    .teacher-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .teacher-portrait { aspect-ratio: 4/3; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-img:first-child { grid-column: span 2; }
+    .cta-section { padding: 4rem 1.5rem; }
+    footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Kru<span>Mes</span>Biology</div>
+  <ul class="nav-links">
+    <li><a href="#why">ทำไมต้องเรียน</a></li>
+    <li><a href="#courses">คอร์สเรียน</a></li>
+    <li><a href="#teacher">เกี่ยวกับครูเมศ</a></li>
+    <li><a href="#gallery">ห้องเรียน</a></li>
+  </ul>
+  <a href="https://learnova.net" target="_blank" class="nav-cta">สมัครเรียน</a>
+  <button class="nav-mobile-btn" onclick="this.textContent = this.textContent==='☰'?'✕':'☰'">☰</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">MWIT · KVIS · สอวน. ชีวะ</div>
+    <h1 class="hero-h1">
+      <span class="line1">ข้อสอบสอวน.</span>
+      <span class="line2">ไม่น่ากลัวอีก</span>
+      <span class="line3">ต่อไป</span>
+    </h1>
+    <p class="hero-sub">
+      สอนให้ <strong>คิดเป็น ไม่ใช่จำเป็น</strong> — ด้วยโจทย์จริงจากข้อสอบ MWIT · KVIS · สอวน. พร้อมไขกับดักทุกข้อ
+    </p>
+    <div class="hero-btns">
+      <a href="https://learnova.net" target="_blank" class="btn-primary">สมัครเรียนเลย →</a>
+      <a href="#courses" class="btn-outline">ดูคอร์สทั้งหมด</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">5,000฿</div>
+        <div class="stat-label">ราคาคอร์ส Early Bird</div>
+      </div>
+      <div>
+        <div class="stat-num">Mid-Aug</div>
+        <div class="stat-label">เปิดรับรุ่นแรก</div>
+      </div>
+      <div>
+        <div class="stat-num">MWIT+</div>
+        <div class="stat-label">ระดับข้อสอบที่ฝึก</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-img-wrap">
+      <div class="hero-img-bg"></div>
+      <img
+        src="DFEC607C-8E78-4BAA-ABCF-2A5E6161729E.png"
+        alt="ครูเมศ KruMesBiology"
+        class="hero-portrait"
+      />
+      <div class="hero-badge">
+        <div class="hero-badge-num">10+</div>
+        <div class="hero-badge-text">ปีประสบการณ์สอน</div>
+      </div>
+      <div class="hero-tag">🏆 MWIT · KVIS</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why" id="why">
+  <div class="section-label">ทำไมต้องเรียนกับครูเมศ</div>
+  <h2 class="section-h2">สอนให้ข้อสอบ<br/>ไม่น่ากลัว</h2>
+  <div class="why-grid">
+    <div class="why-cards">
+      <div class="why-card">
+        <div class="why-icon">🎯</div>
+        <div>
+          <div class="why-card-title">ใช้ข้อสอบจริงทุกคาบ</div>
+          <div class="why-card-desc">เรียนผ่านโจทย์จริงจาก MWIT · KVIS · สอวน. ไม่ใช่แค่ท่องเนื้อหา</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔍</div>
+        <div>
+          <div class="why-card-title">ไขกับดักทุกข้อ</div>
+          <div class="why-card-desc">วิเคราะห์ว่าคนส่วนใหญ่ตอบผิดตรงไหน แล้วสอน logic ที่ถูกต้อง</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🧠</div>
+        <div>
+          <div class="why-card-title">สอนให้คิดเป็น</div>
+          <div class="why-card-desc">ไม่ใช่จำ concept แต่เข้าใจ mechanism ทำโจทย์ใหม่ที่ไม่เคยเห็นได้</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📚</div>
+        <div>
+          <div class="why-card-title">Storytelling ที่จำได้ไม่ลืม</div>
+          <div class="why-card-desc">เชื่อมชีววิทยาเข้ากับชีวิตจริง ทำให้เข้าใจลึกและจำอยู่นาน</div>
+        </div>
+      </div>
+    </div>
+    <div class="why-img-stack">
+      <img src="128_Math_Universe-178.jpeg" alt="ครูเมศสอนในห้องเรียน" class="why-img-main" />
+      <img src="128_Math_Universe-132.jpeg" alt="ครูเมศกับนักเรียน" class="why-img-overlay" />
+    </div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section class="course" id="courses">
+  <div class="course-header">
+    <div>
+      <div class="section-label">คอร์สเรียน</div>
+      <h2 class="section-h2">เลือกคอร์สที่ใช่</h2>
+    </div>
+    <a href="https://learnova.net" target="_blank" class="btn-outline">ดูรายละเอียดทั้งหมด</a>
+  </div>
+  <div class="course-cards">
+
+    <div class="course-card">
+      <div class="course-icon">🔬</div>
+      <div class="course-name">คอร์สชีวะ MWIT-KVIS</div>
+      <div class="course-desc">เตรียมสอบเข้า MWIT และ KVIS ด้วยข้อสอบจริงและกับดักที่ออกบ่อยที่สุด</div>
+      <ul class="course-topics">
+        <li>เซลล์และการแบ่งเซลล์ (Mitosis/Meiosis)</li>
+        <li>พันธุศาสตร์และ Pedigree Analysis</li>
+        <li>โครงสร้างและระบบในพืช</li>
+        <li>ระบบร่างกายมนุษย์</li>
+        <li>ตะลุยข้อสอบจริง 3 ปีล่าสุด</li>
+      </ul>
+      <div class="course-price">
+        <div class="price-original">ราคาปกติ 6,500 ฿</div>
+        <div class="price-main">5,000 ฿</div>
+        <div class="price-note">Early Bird · เปิด mid-August นี้</div>
+      </div>
+      <a href="https://learnova.net" target="_blank" class="course-btn">สมัครเรียน</a>
+    </div>
+
+    <div class="course-card featured">
+      <div class="course-badge-featured">⭐ แนะนำ</div>
+      <div class="course-icon">🏆</div>
+      <div class="course-name">คอร์ส สอวน.ชีวะ</div>
+      <div class="course-desc">เตรียมสอบ สอวน. ชีวะ ครบทุก concept ที่ออกสอบ พร้อม logic การคิดแบบ olympiad</div>
+      <ul class="course-topics">
+        <li>ชีวเคมีและเมแทบอลิซึม</li>
+        <li>พันธุศาสตร์ระดับโมเลกุล</li>
+        <li>นิเวศวิทยาและความหลากหลาย</li>
+        <li>สรีรวิทยาพืชและสัตว์</li>
+        <li>Mock test + เฉลยละเอียดทุกข้อ</li>
+      </ul>
+      <div class="course-price">
+        <div class="price-original">ราคาปกติ 6,500 ฿</div>
+        <div class="price-main">5,000 ฿</div>
+        <div class="price-note">Early Bird · รับจำนวนจำกัด</div>
+      </div>
+      <a href="https://learnova.net" target="_blank" class="course-btn">สมัครเรียน</a>
+    </div>
+
+    <div class="course-card">
+      <div class="course-icon">🎓</div>
+      <div class="course-name">MWIT + สอวน. Combo</div>
+      <div class="course-desc">ครบทั้ง MWIT/KVIS และ สอวน. ในคอร์สเดียว ประหยัดกว่าและต่อเนื่องกว่า</div>
+      <ul class="course-topics">
+        <li>เนื้อหาครบทั้ง 2 คอร์ส</li>
+        <li>เรียนตามลำดับที่วางไว้ให้</li>
+        <li>ประหยัดกว่าซื้อแยก</li>
+        <li>สอบถามครูเมศได้ตลอด</li>
+        <li>อัพเดทข้อสอบใหม่ทุกปี</li>
+      </ul>
+      <div class="course-price">
+        <div class="price-original">ราคาปกติ 13,000 ฿</div>
+        <div class="price-main">8,500 ฿</div>
+        <div class="price-note">ประหยัด 1,500 ฿ เมื่อซื้อคู่</div>
+      </div>
+      <a href="https://learnova.net" target="_blank" class="course-btn">สมัครเรียน</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- TEACHER -->
+<section class="teacher" id="teacher">
+  <div class="section-label">เกี่ยวกับครูเมศ</div>
+  <div class="teacher-grid">
+    <div class="teacher-img-wrap">
+      <img src="128_Math_Universe-134.jpeg" alt="ครูเมศ KruMesBiology" class="teacher-portrait" />
+      <div class="teacher-credential">
+        <div class="teacher-credential-title">ผู้สอน</div>
+        <div class="teacher-credential-name">ครูเมศ KruMesBiology</div>
+      </div>
+    </div>
+    <div class="teacher-info">
+      <div class="teacher-name">ครูเมศ</div>
+      <div class="teacher-title">ครูชีววิทยา · 128MathUniverse @ MBK Center</div>
+      <p class="teacher-bio">
+        สอนชีววิทยามากกว่า 10 ปี เชี่ยวชาญการเตรียมสอบ MWIT · KVIS · สอวน.ชีวะ และ A-Level
+        ด้วยวิธีสอนที่เน้น <strong style="color:#e8f0fe">ไขกับดักข้อสอบ</strong> และ <strong style="color:#e8f0fe">storytelling</strong>
+        ที่ทำให้ชีววิทยาไม่น่ากลัวอีกต่อไป
+      </p>
+      <div class="teacher-tags">
+        <span class="tag">🏫 128MathUniverse MBK</span>
+        <span class="tag">💻 Online via Zoom</span>
+        <span class="tag">🎯 MWIT · KVIS · สอวน.</span>
+        <span class="tag">📗 Eagle Book Biology 128</span>
+      </div>
+      <div class="teacher-results">
+        <div class="result-box">
+          <div class="result-num">10+</div>
+          <div class="result-label">ปีประสบการณ์</div>
+        </div>
+        <div class="result-box">
+          <div class="result-num">MWIT</div>
+          <div class="result-label">ระดับข้อสอบ</div>
+        </div>
+        <div class="result-box">
+          <div class="result-num">128</div>
+          <div class="result-label">Video lessons</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="section-label">ห้องเรียนจริง</div>
+  <h2 class="section-h2">บรรยากาศการเรียน</h2>
+  <div class="gallery-grid">
+    <img src="128_Math_Universe-253.jpeg" alt="ครูเมศสอนในห้องเรียน" class="gallery-img" />
+    <img src="128_Math_Universe-151.jpeg" alt="นักเรียนในห้องเรียน" class="gallery-img" />
+    <img src="128_Math_Universe-152.jpeg" alt="ครูเมศอธิบายชีววิทยา" class="gallery-img" />
+    <img src="128_Math_Universe-130.jpeg" alt="ห้องเรียน 128MathUniverse" class="gallery-img" />
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label">พร้อมเริ่มแล้ว?</div>
+  <h2 class="section-h2">เริ่มต้นทำให้<br/>ข้อสอบไม่น่ากลัว</h2>
+  <p class="section-sub">
+    เปิดรับรุ่นแรก <strong style="color:#e8f0fe">mid-August นี้</strong> รับจำนวนจำกัด ทักมาสอบถามได้เลย
+  </p>
+  <div class="cta-btns">
+    <a href="https://learnova.net" target="_blank" class="btn-primary">สมัครเรียนที่ Learnova →</a>
+    <a href="https://line.me" target="_blank" class="btn-outline">💬 ทักถามก่อนสมัคร</a>
+  </div>
+  <p class="cta-note">สอบถามผ่าน LINE OA KruMesBiology · ตอบทุกคำถาม</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Kru<span>Mes</span>Biology</div>
+  <div class="footer-links">
+    <a href="https://instagram.com/krumesbiology" target="_blank">Instagram</a>
+    <a href="https://tiktok.com/@krumesbio" target="_blank">TikTok</a>
+    <a href="https://learnova.net" target="_blank">เรียนออนไลน์</a>
+  </div>
+  <div class="footer-copy">© 2026 KruMesBiology · All rights reserved</div>
+</footer>
+
+</body>
+</html>
